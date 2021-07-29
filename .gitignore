@@ -2,3 +2,5 @@
 .vscode
 .metals
 logs
+__pycache__
+DOC.md
