@@ -25,6 +25,6 @@ COPY ecommerce.retail_profiling
     customer_id,
     country
 )
-FROM '/data/retail_profiling.csv' 
+FROM '/opt/airflow/data/retail_profiling.csv' 
 DELIMITER ','
 CSV HEADER;

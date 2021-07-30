@@ -9,6 +9,9 @@ from airflow.operators.postgres_operator import PostgresOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 
+from great_expectations_provider.operators.great_expectations import (
+    GreatExpectationsOperator
+)
 
 # Get exported variables from Airflow (taskbar Admin -> Variables)
 # Add AWS connection as well (taskbar Admin -> Connections)
@@ -23,7 +26,7 @@ default_args = {
     "email": ["airflow@airflow.com"],
     "email_on_failure": False,
     "email_on_retry": False,
-    "retries": 2,
+    "retries": 3,
     "retry_delay": timedelta(minutes=1),
 }
 
@@ -42,8 +45,17 @@ extract_retail_data = PostgresOperator(
     sql="./scripts/sql/extract_retail_data.sql",
     postgres_conn_id="postgres_default",
     params={"to_temp": "/temp/retail_profiling.csv"},
-    depends_on_past=True,
-    wait_for_downstream=True,
+)
+
+validate_source_retail_data = GreatExpectationsOperator(
+    dag=dag,
+    task_id="validate_source_retail_data",
+    expectation_suite_name="retail_suite",
+    # checkpoint_name="retail_checkpoint",
+    batch_kwargs={
+        "table": "retail_profiling",
+        "datasource": "retail"
+    }
 )
 
 # Moves CSV file from temp folder to S3 data lake raw folder
@@ -62,4 +74,4 @@ retail_to_datalake_raw = PythonOperator(
 end_of_data_pipeline = DummyOperator(dag=dag, task_id="end_of_data_pipeline")
 
 
-extract_retail_data >> retail_to_datalake_raw >> end_of_data_pipeline
+extract_retail_data >> validate_source_retail_data >> retail_to_datalake_raw >> end_of_data_pipeline
