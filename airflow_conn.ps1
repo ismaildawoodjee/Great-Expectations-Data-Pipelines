@@ -2,7 +2,7 @@
 $USER_NAME = 'ismaildawoodjee'
 $REGION = 'ap-southeast-1'
 $PROJECT_NAME = 'great-expectations-data-pipelines'
-$BUCKET_NAME = 'idawoodjee-bucket-name'
+$BUCKET_NAME = 'idawoodjee-batch-bucket'
 
 $AWS_ACCESS_KEY_ID = aws configure get aws_access_key_id --profile $USER_NAME
 $AWS_SECRET_ACCESS_KEY = aws configure get aws_secret_access_key --profile $USER_NAME
@@ -18,11 +18,11 @@ docker exec -d $PROJECT_NAME'_airflow-webserver_1' `
     --conn-password $AWS_SECRET_ACCESS_KEY `
     --conn-extra "{\`"region_name\`": \`"$REGION\`"}"
 
-# docker exec -d $PROJECT_NAME'_airflow-webserver_1' `
-#     airflow connections add 'postgres_default' `
-#     --conn-type 'Postgres' `
-#     --conn-login 'airflow' `
-#     --conn-password 'airflow' `
-#     --conn-host 'localhost' `
-#     --conn-port 5432 `
-#     --conn-schema 'ecommerce'
+docker exec -d $PROJECT_NAME'_airflow-webserver_1' `
+    airflow connections add 'postgres_default' `
+    --conn-type 'postgres' `
+    --conn-login 'airflow' `
+    --conn-password 'airflow' `
+    --conn-host 'localhost' `
+    --conn-port 5432 `
+    --conn-schema 'ecommerce'

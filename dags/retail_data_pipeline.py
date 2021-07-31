@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-
-from utils import local_to_s3
+import os
+from utils import local_to_s3, validate_data
 
 from airflow import DAG
 from airflow.models import Variable
@@ -8,10 +8,11 @@ from airflow.models import Variable
 from airflow.operators.postgres_operator import PostgresOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.bash_operator import BashOperator
 
-from great_expectations_provider.operators.great_expectations import (
-    GreatExpectationsOperator
-)
+# from great_expectations_provider.operators.great_expectations import (
+#     GreatExpectationsOperator
+# )
 
 # Get exported variables from Airflow (taskbar Admin -> Variables)
 # Add AWS connection as well (taskbar Admin -> Connections)
@@ -47,15 +48,32 @@ extract_retail_data = PostgresOperator(
     params={"to_temp": "/temp/retail_profiling.csv"},
 )
 
-validate_source_retail_data = GreatExpectationsOperator(
+# validate_source_retail_data = GreatExpectationsOperator(
+#     dag=dag,
+#     task_id="validate_source_retail_data",
+#     expectation_suite_name="retail_suite",
+#     # checkpoint_name="retail_checkpoint",
+#     batch_kwargs={
+#         "table": "ecommerce.retail_profiling",
+#         "datasource": "retail",
+#     }
+# )
+
+# Create validation task
+# task_validate_data = PythonOperator(
+#     dag=dag,
+#     task_id="task_validate_data",
+#     python_callable=validate_data,
+#     provide_context=True,
+# )
+
+validate_source_retail_data = BashOperator(
     dag=dag,
     task_id="validate_source_retail_data",
-    expectation_suite_name="retail_suite",
-    # checkpoint_name="retail_checkpoint",
-    batch_kwargs={
-        "table": "retail_profiling",
-        "datasource": "retail"
-    }
+    # bash_command="pwd"
+    # bash_command="which great_expectations"
+    bash_command="cd /opt/airflow/; \
+great_expectations checkpoint run retail_checkpoint"
 )
 
 # Moves CSV file from temp folder to S3 data lake raw folder
@@ -74,4 +92,12 @@ retail_to_datalake_raw = PythonOperator(
 end_of_data_pipeline = DummyOperator(dag=dag, task_id="end_of_data_pipeline")
 
 
+# extract_retail_data >> validate_source_retail_data >> retail_to_datalake_raw >> end_of_data_pipeline
 extract_retail_data >> validate_source_retail_data >> retail_to_datalake_raw >> end_of_data_pipeline
+# (
+#     extract_retail_data
+#     >> task_validate_data
+#     >> retail_to_datalake_raw
+#     >> end_of_data_pipeline
+# )
+# extract_retail_data >> retail_to_datalake_raw >> end_of_data_pipeline
