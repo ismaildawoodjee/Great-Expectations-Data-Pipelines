@@ -1,3 +1,6 @@
+# Not required
+# Still have to figure out how to initialize GE workspace only using Python
+
 from ruamel import yaml
 
 import great_expectations as ge

@@ -18,11 +18,12 @@ docker exec -d $PROJECT_NAME'_airflow-webserver_1' `
     --conn-password $AWS_SECRET_ACCESS_KEY `
     --conn-extra "{\`"region_name\`": \`"$REGION\`"}"
 
-docker exec -d $PROJECT_NAME'_airflow-webserver_1' `
-    airflow connections add 'postgres_default' `
-    --conn-type 'postgres' `
-    --conn-login 'airflow' `
-    --conn-password 'airflow' `
-    --conn-host 'localhost' `
-    --conn-port 5432 `
-    --conn-schema 'ecommerce'
+# # Either specify AIRFLOW_CONN_POSTGRES_DEFAULT in `docker-compose` file or add it using Shell command below
+# docker exec -d $PROJECT_NAME'_airflow-webserver_1' `
+#     airflow connections add 'postgres_default' `
+#     --conn-type 'postgres' `
+#     --conn-login 'airflow' `
+#     --conn-password 'airflow' `
+#     --conn-host 'postgres' `
+#     --conn-port 5432 `
+#     --conn-schema 'ecommerce'

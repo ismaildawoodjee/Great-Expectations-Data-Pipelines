@@ -16,11 +16,11 @@ config_version: 3.0
 datasources:
   retail:
     module_name: great_expectations.datasource
+    credentials: ${retail}
     class_name: SqlAlchemyDatasource
     data_asset_type:
       class_name: SqlAlchemyDataset
       module_name: great_expectations.dataset
-    credentials: ${retail}
 
 # This config file supports variable substitution which enables: 1) keeping
 # secrets out of source control & 2) environment-based configuration changes
@@ -99,6 +99,6 @@ data_docs_sites:
       class_name: DefaultSiteIndexBuilder
 
 anonymous_usage_statistics:
-  data_context_id: 32a1bb08-6736-4e66-9863-7a5fdd32746e
   enabled: true
+  data_context_id: a621354f-eacc-41c3-96aa-996cac38b99b
 notebooks:
