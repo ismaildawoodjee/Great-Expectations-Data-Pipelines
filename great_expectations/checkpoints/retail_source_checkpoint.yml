@@ -1,4 +1,4 @@
-name: retail_checkpoint
+name: retail_source_checkpoint
 config_version: 1.0
 template_name:
 module_name: great_expectations.checkpoint
@@ -21,11 +21,11 @@ evaluation_parameters: {}
 runtime_configuration: {}
 validations:
   - batch_request:
-      datasource_name: retail
+      datasource_name: retail_source
       data_connector_name: default_inferred_data_connector_name
-      data_asset_name: retail_profiling
+      data_asset_name: ecommerce.retail_profiling
       data_connector_query:
         index: -1
-    expectation_suite_name: retail_suite
+    expectation_suite_name: retail_source_suite
 profilers: []
 ge_cloud_id:

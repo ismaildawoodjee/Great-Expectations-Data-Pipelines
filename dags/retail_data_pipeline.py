@@ -26,11 +26,11 @@ default_args = {
     "retry_delay": timedelta(minutes=1),
 }
 
-# Running DAG everyday at midnight
+# Running DAG everyday at midnight Malaysia time (1600 UTC)
 dag = DAG(
     dag_id="retail_data_pipeline",
     default_args=default_args,
-    schedule_interval="0 0 * * *",
+    schedule_interval="0 16 * * *",
     max_active_runs=1,
 )
 
@@ -48,7 +48,7 @@ validate_source_retail_data = BashOperator(
     dag=dag,
     task_id="validate_source_retail_data",
     bash_command="cd /opt/airflow/; \
-great_expectations --v3-api checkpoint run retail_checkpoint",
+great_expectations --v3-api checkpoint run retail_source_checkpoint",
 )
 
 # Moves CSV file from temp folder to S3 data lake raw folder
@@ -68,7 +68,7 @@ validate_load_retail_data = BashOperator(
     dag=dag,
     task_id="validate_load_retail_data",
     bash_command="cd /opt/airflow/; \
-great_expectations --v3-api checkpoint run retail_raw_checkpoint",
+great_expectations --v3-api checkpoint run retail_load_checkpoint",
 )
 
 end_of_data_pipeline = DummyOperator(dag=dag, task_id="end_of_data_pipeline")
@@ -78,5 +78,6 @@ end_of_data_pipeline = DummyOperator(dag=dag, task_id="end_of_data_pipeline")
     extract_retail_data
     >> validate_source_retail_data
     >> load_retail_data
+    >> validate_load_retail_data
     >> end_of_data_pipeline
 )

@@ -2,7 +2,7 @@
 $USER_NAME = 'ismaildawoodjee'
 $REGION = 'ap-southeast-1'
 $PROJECT_NAME = 'great-expectations-data-pipelines'
-$BUCKET_NAME = 'idawoodjee-batch-bucket'
+$BUCKET_NAME = 'greatex-bucket'
 
 $AWS_ACCESS_KEY_ID = aws configure get aws_access_key_id --profile $USER_NAME
 $AWS_SECRET_ACCESS_KEY = aws configure get aws_secret_access_key --profile $USER_NAME
