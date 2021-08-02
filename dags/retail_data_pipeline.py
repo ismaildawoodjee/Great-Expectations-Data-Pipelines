@@ -44,9 +44,9 @@ extract_retail_data = PostgresOperator(
 )
 
 # Have to be inside the `airflow` folder in order to run validation CLI command
-validate_extract_retail_data = BashOperator(
+validate_source_retail_data = BashOperator(
     dag=dag,
-    task_id="validate_extract_retail_data",
+    task_id="validate_source_retail_data",
     bash_command="cd /opt/airflow/; \
 great_expectations --v3-api checkpoint run retail_checkpoint",
 )
@@ -64,12 +64,19 @@ load_retail_data = PythonOperator(
     },
 )
 
+validate_load_retail_data = BashOperator(
+    dag=dag,
+    task_id="validate_load_retail_data",
+    bash_command="cd /opt/airflow/; \
+great_expectations --v3-api checkpoint run retail_raw_checkpoint",
+)
+
 end_of_data_pipeline = DummyOperator(dag=dag, task_id="end_of_data_pipeline")
 
 
 (
     extract_retail_data
-    >> validate_extract_retail_data
+    >> validate_source_retail_data
     >> load_retail_data
     >> end_of_data_pipeline
 )

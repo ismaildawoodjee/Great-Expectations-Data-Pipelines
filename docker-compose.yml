@@ -55,7 +55,7 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'  # to avoid cluttering, don't load example DAGs
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
-    _PIP_ADDITIONAL_REQUIREMENTS: 'great_expectations'  # separate with spaces to install additional packages
+    _PIP_ADDITIONAL_REQUIREMENTS: 'great_expectations boto3 fsspec s3fs'  # separate with spaces to install additional packages
     AIRFLOW_CONN_POSTGRES_DEFAULT: postgres://airflow:airflow@postgres:5432/airflow  # specify this for Airflow to connect to Postgres container
   volumes:
     - ./dags:/opt/airflow/dags
