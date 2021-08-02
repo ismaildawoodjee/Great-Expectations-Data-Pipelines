@@ -1,5 +1,5 @@
 {
-  "data_asset_type": "Dataset",
+  "data_asset_type": null,
   "expectation_suite_name": "retail_suite",
   "expectations": [
     {
@@ -16,73 +16,22 @@
           "country"
         ]
       },
-      "meta": {
-        "BasicSuiteBuilderProfiler": {
-          "confidence": "very low"
-        }
-      }
+      "meta": {}
     }
   ],
   "meta": {
-    "BasicSuiteBuilderProfiler": {
-      "batch_kwargs": {
-        "data_asset_name": "ecommerce.retail_profiling",
-        "datasource": "retail",
-        "limit": 1000,
-        "schema": "ecommerce",
-        "table": "retail_profiling"
-      },
-      "created_at": 1627749698.369404,
-      "created_by": "BasicSuiteBuilderProfiler"
-    },
     "citations": [
       {
-        "batch_kwargs": {
-          "data_asset_name": "ecommerce.retail_profiling",
-          "datasource": "retail",
-          "limit": 1000,
-          "schema": "ecommerce",
-          "table": "retail_profiling"
+        "batch_request": {
+          "data_asset_name": "retail_profiling",
+          "data_connector_name": "default_inferred_data_connector_name",
+          "datasource_name": "retail",
+          "limit": 1000
         },
-        "batch_markers": {
-          "ge_load_time": "20210731T164138.052658Z"
-        },
-        "citation_date": "2021-07-31T16:41:38.462675Z",
-        "comment": "BasicSuiteBuilderProfiler added a citation based on the current batch."
+        "citation_date": "2021-08-02T04:29:13.576020Z",
+        "comment": "Created suite added via CLI"
       }
     ],
-    "columns": {
-      "country": {
-        "description": ""
-      },
-      "customer_id": {
-        "description": ""
-      },
-      "detail": {
-        "description": ""
-      },
-      "invoice_date": {
-        "description": ""
-      },
-      "invoice_number": {
-        "description": ""
-      },
-      "quantity": {
-        "description": ""
-      },
-      "stock_code": {
-        "description": ""
-      },
-      "unit_price": {
-        "description": ""
-      }
-    },
-    "great_expectations_version": "0.13.24",
-    "notes": {
-      "content": [
-        "#### This is an _example_ suite\n\n- This suite was made by quickly glancing at 1000 rows of your data.\n- This is **not a production suite**. It is meant to show examples of expectations.\n- Because this suite was auto-generated using a very basic profiler that does not know your data like you do, many of the expectations may not be meaningful.\n"
-      ],
-      "format": "markdown"
-    }
+    "great_expectations_version": "0.13.24"
   }
 }

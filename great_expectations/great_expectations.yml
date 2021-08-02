@@ -15,12 +15,22 @@ config_version: 3.0
 # add a new datasource. Read more at https://docs.greatexpectations.io/en/latest/reference/core_concepts/datasource.html
 datasources:
   retail:
+    class_name: Datasource
     module_name: great_expectations.datasource
-    credentials: ${retail}
-    class_name: SqlAlchemyDatasource
-    data_asset_type:
-      class_name: SqlAlchemyDataset
-      module_name: great_expectations.dataset
+    data_connectors:
+      default_runtime_data_connector_name:
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        batch_identifiers:
+          - default_identifier_name
+      default_inferred_data_connector_name:
+        class_name: InferredAssetSqlDataConnector
+        module_name: great_expectations.datasource.data_connector
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      module_name: great_expectations.execution_engine
+      credentials: ${retail}  # put credentials in uncommitted/config_variables.yml and reference them like this
+
 
 # This config file supports variable substitution which enables: 1) keeping
 # secrets out of source control & 2) environment-based configuration changes
@@ -100,5 +110,5 @@ data_docs_sites:
 
 anonymous_usage_statistics:
   enabled: true
-  data_context_id: a621354f-eacc-41c3-96aa-996cac38b99b
+  data_context_id: f9cef4e3-32d7-495d-9c1b-43b727d8989a
 notebooks:

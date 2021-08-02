@@ -43,11 +43,12 @@ extract_retail_data = PostgresOperator(
     params={"to_temp": "/temp/retail_profiling.csv"},
 )
 
+# Have to be inside the `airflow` folder in order to run validation CLI command
 validate_extract_retail_data = BashOperator(
     dag=dag,
     task_id="validate_extract_retail_data",
     bash_command="cd /opt/airflow/; \
-great_expectations checkpoint run retail_checkpoint",
+great_expectations --v3-api checkpoint run retail_checkpoint",
 )
 
 # Moves CSV file from temp folder to S3 data lake raw folder

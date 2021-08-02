@@ -83,6 +83,8 @@ services:
       - ./data:/opt/airflow/data
       - ./temp:/temp
       - ./pgsetup:/docker-entrypoint-initdb.d  # this uses the SQL script in `pgsetup` to populate PostgresDB from a CSV file
+    ports: 
+      - "5432:5432"  # Exposing Postgres ports are required for GE to connect to Postgres container
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 5s

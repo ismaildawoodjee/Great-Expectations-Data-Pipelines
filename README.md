@@ -15,15 +15,14 @@
 - Use Version 2 API when you want to use Great Expectations with Airflow
 - Specify the library to be installed (`great_expectations`) in the `PIP_ADDITIONAL_REQUIREMENTS` in the `docker-compose` file
 - **Prerequisites:** Create a Data Context, connect to a Datasource, create an Expectations Suite, create a Checkpoint, and have an Airflow DAG ready
-- Recommended to use BashOperator to validate data batches since it is the most intuitive and straightforward
+- Recommended to use BashOperator to validate data batches since it is the most intuitive and straightforward. Also works with both V2 and V3 APIs.
 - Can also use PythonOperator for validation but additional setup is necessary
 - Simply plug in the BashOperator as a Task within the Airflow DAG
-- **DO NOT** use GreatExpectationsOperator
-- **DO NOT** use Version 3 API in conjunction with Airflow
+- **DO NOT** use GreatExpectationsOperator, use BashOperator/PythonOperator instead.
 - Keep in mind the host names to be used:
   - when connecting to Postgres from local machine or when connecting from Airflow Worker container
   - when running Airflow on local machine or when running Airflow on Docker
-  - specify/edit the credentials in the `config-variables.yml` file in the `uncommitted` folder
+  - specify/edit the credentials in the `config-variables.yml` file in the `great_expectations/uncommitted` folder
 
 ## Debugging
 
@@ -32,5 +31,5 @@
 - BashOperator cannot find Great Expectations folder
 - **Very useful for debugging** to enter the Airflow Worker container (with `docker exec -it`) and directly run commands inside
   - helps with finding where folders are located
-  - helps with comparison between running GE CLI commands in the container vs running CLI commands in local machine
+  - helps with comparison between running GE CLI commands in the container vs running CLI commands in local machine. You can see the error logs without having to run the Airflow DAG.
   - helps with connectivity issues and resolving host names
