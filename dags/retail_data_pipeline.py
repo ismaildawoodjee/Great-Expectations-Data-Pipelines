@@ -26,12 +26,18 @@ default_args = {
     "retry_delay": timedelta(minutes=1),
 }
 
+def get_datepart(ds, part: int):
+    return ds.split('-')[part]
+    
 # Running DAG everyday at midnight Malaysia time (1600 UTC)
 dag = DAG(
     dag_id="retail_data_pipeline",
     default_args=default_args,
     schedule_interval="0 16 * * *",
     max_active_runs=1,
+    user_defined_macros={
+        "datepart": get_datepart
+    }
 )
 
 # Copies PostgresDB data into a CSV file in the temporary folder
@@ -58,7 +64,9 @@ load_retail_data = PythonOperator(
     python_callable=local_to_s3,
     op_kwargs={
         "file_name": "/temp/retail_profiling.csv",
-        "key": "raw/retail/{{ ds }}/retail_profiling.csv",  # `ds` is the Jinja macro for execution date
+        "key": "raw/retail/\
+{{ datepart(ds, 0) }}/{{ datepart(ds, 1) }}/{{ datepart(ds, 2) }} \
+/retail_profiling.csv",  # `ds` is the Airflow jinja macro for execution date
         "bucket_name": BUCKET_NAME,
         "remove_local": True,
     },

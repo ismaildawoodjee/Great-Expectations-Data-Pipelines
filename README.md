@@ -33,3 +33,16 @@
   - helps with finding where folders are located
   - helps with comparison between running GE CLI commands in the container vs running CLI commands in local machine. You can see the error logs without having to run the Airflow DAG.
   - helps with connectivity issues and resolving host names
+
+## Debugging S3 Connector
+
+- Default regex applies to the entire S3 bucket URI other than `s3://bucket-name` and file extension, e.g. `.csv`
+- Two common errors:
+  1. List index out of range - the above point and the second link below should fix this
+  2. Says invalid bucket name "greatex-bucket\raw" even though my bucket name "greatex-bucket" is completely valid
+    This has a suspicious backslash which might indicate something to do with Windows,
+    so I tried out the same operation on Linux, and there was no error!
+- Have to redo the whole pipeline on Linux and raise an issue.
+
+[Airflow macros](https://www.datafold.com/blog/3-most-underused-features-of-apache-airflow/)
+[Regex for inferring filenames](https://docs.greatexpectations.io/en/latest/guides/how_to_guides/configuring_datasources/how_to_configure_an_inferredassetdataconnector.html)
